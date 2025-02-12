@@ -5,7 +5,7 @@ console.log(features);
 const Home = () => {
   // console.log(features);
   return (
-    <main className="flex-1 p-2 lg:p-5 bg-gradient-to-bl from-white to-indigo-600 overflow-y-scroll">
+    <main className="flex-1 p-2 lg:p-5 bg-gradient-to-bl from-white to-indigo-600 overflow-auto">
       <div className="bg-white py-24 sm:py-32 rounded-md drop-shadow-xl">
         <div className="flex flex-col justify-center items-center mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl sm:text-center">
