@@ -1,19 +1,16 @@
-import Header from "@/components/Header";
-import { ClerkLoaded } from "@clerk/nextjs";
+import Documents from "@/components/Documents";
 
-interface DashboardProps {
-  children: React.ReactNode;
-}
+export const dynamic = "force-dynamic";
 
-const Dashboard = ({ children }: DashboardProps) => {
+const Dashboard = () => {
   return (
-    <ClerkLoaded>
-      <div className="flex-1 flex flex-col h-screen">
-        <Header />
+    <div className="h-full max-w-7xl mx-auto">
+      <h1 className="text-3xl p-5 bg-gray-100 font-extralight text-indigo-600">
+        My Documents
+      </h1>
 
-        <main className="flex-1 overflow-y-auto">{children}</main>
-      </div>
-    </ClerkLoaded>
+      <Documents />
+    </div>
   );
 };
 
