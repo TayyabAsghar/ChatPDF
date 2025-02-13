@@ -1,16 +1,17 @@
-"use server"
+"use server";
 
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
+import { generateEmbeddingsInPinecone } from "@/lib/langchain";
 
 const generateEmbeddings = async (fileId: string) => {
-    auth.protect();
+  auth.protect();
 
-    await generateEmbeddingsInPineconeVectorStore(fileId);
+  await generateEmbeddingsInPinecone(fileId);
 
-    revalidatePath("/dashboard");
+  revalidatePath("/dashboard");
 
-    return {completed: true};
-}
+  return { completed: true };
+};
 
 export default generateEmbeddings;

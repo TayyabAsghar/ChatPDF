@@ -8,24 +8,24 @@ import { db } from "@/lib/firebase/firebase";
 import { compressPDF } from "@/lib/pdfCompressor";
 import { uploadToCloudinary } from "@/lib/cloudinary";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import generateEmbeddings from "@/actions/generateEmbeddings";
 
 export enum StatusText {
-    UPLOADING = "Uploading file...",
-    COMPRESSING = "Compressing PDF...",
-    SAVING = "Saving file to database...",
-    GENERATING = "Generating AI Embeddings, This will only take a few seconds...",
+  UPLOADING = "Uploading file...",
+  COMPRESSING = "Compressing PDF...",
+  SAVING = "Saving file to database...",
+  GENERATING = "Generating AI Embeddings, This will only take a few seconds...",
 }
 
 export type Status = StatusText[keyof StatusText];
 
 function useUpload() {
-    // const router = useRouter();
-    const { user } = useUser();
-    const [fileId, setFileId] = useState<string | null>(null);
-    const [status, setStatus] = useState<Status | null>(null);
-    const [progress, setProgress] = useState<number | null>(null);
+  // const router = useRouter();
+  const { user } = useUser();
+  const [fileId, setFileId] = useState<string | null>(null);
+  const [status, setStatus] = useState<Status | null>(null);
+  const [progress, setProgress] = useState<number | null>(null);
 
-   
   const handleUpload = async (file: File) => {
     if (!file || !user) return;
 
@@ -39,41 +39,46 @@ function useUpload() {
     try {
       const downloadUrl = await uploadToCloudinary(compressedFile);
       setStatus(StatusText.SAVING);
-      
+
       await saveFileUrl(compressedFile, file.name, downloadUrl, user.id);
       setStatus(StatusText.GENERATING);
+      await generateEmbeddings(uniqueFileName);
       setProgress(0);
     } catch (error) {
       console.error("Upload failed", error);
       setStatus(null);
     }
-    
-};
+  };
 
-const saveFileUrl = async (file: File, originalName: string,  downloadUrl: string, userid: string) => {
+  const saveFileUrl = async (
+    file: File,
+    originalName: string,
+    downloadUrl: string,
+    userid: string
+  ) => {
     try {
-        const fileRef = doc(db, "users", userid, "files", file.name || "");
-        await setDoc(fileRef, {
-            name: file.name,
-            size: file.size,
-            type: file.type,
-            url: downloadUrl,
-            originalName: originalName,
-            createdAt: serverTimestamp(),          
-        })
-        
-        setFileId(file.name);
+      const fileRef = doc(db, "users", userid, "files", file.name || "");
+      await setDoc(fileRef, {
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        url: downloadUrl,
+        originalName: originalName,
+        createdAt: serverTimestamp(),
+      });
+
+      setFileId(file.name);
     } catch (error) {
-        console.error("Error saving file to Firestore", error);
-        setStatus(null);
+      console.error("Error saving file to Firestore", error);
+      setStatus(null);
     }
-  }
+  };
 
   return {
-      status,
-      fileId,
-      progress,
-      handleUpload
+    status,
+    fileId,
+    progress,
+    handleUpload,
   };
 }
 
