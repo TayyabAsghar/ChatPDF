@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.11.2",
+    "@pinecone-database/pinecone": "^4.1.0",
     "@radix-ui/react-slot": "^1.1.2",
     "@types/uuid": "^10.0.0",
     "class-variance-authority": "^0.7.1",
