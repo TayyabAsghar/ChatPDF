@@ -1,10 +1,23 @@
 "use client";
 
 import { useRouter } from "next/router";
-import useUpload from "@/hooks/useUpload";
 import { useDropzone } from "react-dropzone";
-import { useCallback, useEffect } from "react";
-import { CircleArrowDown, RocketIcon } from "lucide-react";
+import { JSX, useCallback, useEffect } from "react";
+import useUpload, { StatusText } from "@/hooks/useUpload";
+import {
+  CircleArrowDown,
+  FileArchive,
+  HammerIcon,
+  RocketIcon,
+  SaveIcon,
+} from "lucide-react";
+
+const StatusIcons: { [key in StatusText]: JSX.Element } = {
+  [StatusText.SAVING]: <SaveIcon className="size-20 text-indigo-600" />,
+  [StatusText.UPLOADING]: <RocketIcon className="size-20 text-indigo-600" />,
+  [StatusText.GENERATING]: <HammerIcon className="size-20 text-indigo-600" />,
+  [StatusText.COMPRESSING]: <FileArchive className="size-20 text-indigo-600" />,
+};
 
 const FileUploader = () => {
   const router = useRouter();
@@ -33,7 +46,6 @@ const FileUploader = () => {
 
   return (
     <div className="flex flex-col gap-4 items-center justify-center max-w-7xl mx-auto">
-      {uploadInProgress ? <></> : <></>}
       <div
         {...getRootProps()}
         className={`p-10 border-2 border-dashed mt-10 w-[90%] border-indigo-600 text-indigo-600 rounded-lg h-96 flex items-center 
@@ -50,11 +62,22 @@ const FileUploader = () => {
             </>
           ) : (
             <>
-              <CircleArrowDown className="size-20 animate-bounce" />
-              <p>
-                Drag &apos;n&apos; drop some files here, or click to select
-                files
-              </p>
+              {uploadInProgress && status ? (
+                <>
+                  <>{StatusIcons[status as StatusText]}</>
+                  <p className="text-indigo-600 animate-pulse">
+                    {status as StatusText}
+                  </p>
+                </>
+              ) : (
+                <>
+                  <CircleArrowDown className="size-20 animate-bounce" />
+                  <p>
+                    Drag &apos;n&apos; drop some files here, or click to select
+                    files
+                  </p>
+                </>
+              )}
             </>
           )}
         </div>
