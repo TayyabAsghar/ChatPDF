@@ -1,8 +1,8 @@
-import pineconeClient from "./pinecone";
+import pineconeClient from "@/lib/pinecone";
 import { auth } from "@clerk/nextjs/server";
-import { adminDb } from "./firebase/firebaseAdmin";
 import { PineconeStore } from "@langchain/pinecone";
 import { Index, RecordMetadata } from "@pinecone-database/pinecone";
+import { getFileDownloadUrl } from "@/lib/firebase/firebaseFunctions";
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import {
@@ -30,14 +30,7 @@ const generateSplitDocs = async (fileId: string) => {
   const { userId } = await auth();
   if (!userId) throw new Error("User not found");
 
-  const firebaseDocRef = await adminDb
-    .collection("users")
-    .doc(userId)
-    .collection("files")
-    .doc(fileId)
-    .get();
-
-  const downloadUrl = firebaseDocRef.data()?.url;
+  const downloadUrl = await getFileDownloadUrl(userId, fileId);
   if (!downloadUrl) throw new Error("PDF url not found.");
 
   const response = await fetch(downloadUrl);

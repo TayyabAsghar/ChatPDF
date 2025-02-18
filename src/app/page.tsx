@@ -1,9 +1,8 @@
 import Link from "next/link";
 import features from "@/data/features";
 import { Button } from "@/components/ui/button";
-console.log(features);
+
 const Home = () => {
-  // console.log(features);
   return (
     <main className="flex-1 p-2 lg:p-5 bg-gradient-to-bl from-white to-indigo-600 overflow-auto">
       <div className="bg-white py-24 sm:py-32 rounded-md drop-shadow-xl">
