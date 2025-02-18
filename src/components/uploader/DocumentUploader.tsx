@@ -17,7 +17,11 @@ const StatusIcons: { [key in StatusText]: JSX.Element } = {
   [StatusText.GENERATING]: <HammerIcon className="size-20 text-indigo-600" />,
 };
 
-const FileUploader = () => {
+interface DocumentUploaderProps {
+  setIsUploading: (value: boolean) => void;
+}
+
+const DocumentUploader = ({ setIsUploading }: DocumentUploaderProps) => {
   const router = useRouter();
   const { progress, status, fileId, handleUpload } = useUpload();
 
@@ -25,17 +29,24 @@ const FileUploader = () => {
     if (fileId) router.push(`dashboard/files/${fileId}`);
   }, [fileId, router]);
 
-  const onDrop = useCallback(async (acceptFiles: File[]) => {
-    const file = acceptFiles[0];
+  const onDrop = useCallback(
+    async (acceptFiles: File[]) => {
+      const file = acceptFiles[0];
 
-    if (file) await handleUpload(file);
-  }, []);
+      if (file) {
+        setIsUploading(true);
+        await handleUpload(file);
+      }
+    },
+    [setIsUploading]
+  );
 
   const { getRootProps, getInputProps, isDragActive, isFocused, isDragAccept } =
     useDropzone({
       onDrop,
       maxFiles: 1,
       accept: { "application/pdf": [".pdf"] },
+      noKeyboard: true,
     });
 
   const uploadInProgress = progress != null && progress >= 0 && progress < 100;
@@ -47,7 +58,7 @@ const FileUploader = () => {
     >
       <div
         {...getRootProps()}
-        className={`p-10 border-2 border-dashed mt-10 w-[90%] border-indigo-600 text-indigo-600 rounded-lg h-96 flex items-center 
+        className={`p-12 border-2 border-dashed mt-10 border-indigo-600 text-indigo-600 rounded-lg h-96 flex items-center 
             justify-center ${
               isFocused || isDragAccept ? "bg-indigo-300" : "bg-indigo-100"
             }`}
@@ -71,10 +82,7 @@ const FileUploader = () => {
               ) : (
                 <>
                   <CircleArrowDown className="size-20 animate-bounce" />
-                  <p>
-                    Drag &apos;n&apos; drop some files here, or click to select
-                    files
-                  </p>
+                  <p>Drag &apos;n&apos; Drop, or click to select file</p>
                 </>
               )}
             </>
@@ -85,4 +93,4 @@ const FileUploader = () => {
   );
 };
 
-export default FileUploader;
+export default DocumentUploader;

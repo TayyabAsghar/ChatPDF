@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { FilePlus2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SignedIn, UserButton } from "@clerk/nextjs";
+import UploadDocument from "@/components/uploader/UploadDocument";
 
 const Header = () => {
   return (
@@ -25,16 +25,7 @@ const Header = () => {
             <Link href="/dashboard">My Documents</Link>
           </Button>
 
-          <Button
-            className="border-indigo-600"
-            variant="outline"
-            title="Upload"
-            asChild
-          >
-            <Link href="/dashboard/upload">
-              <FilePlus2 className="text-indigo-600" />
-            </Link>
-          </Button>
+          <UploadDocument buttonType="icon" />
 
           <UserButton />
         </div>
