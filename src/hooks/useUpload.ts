@@ -3,28 +3,24 @@
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useUser } from "@clerk/nextjs";
-// import { useRouter } from "next/router";
 import { db } from "@/lib/firebase/firebase";
-import { compressPDF } from "@/lib/pdfCompressor";
 import { uploadToCloudinary } from "@/lib/cloudinary";
-import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import generateEmbeddings from "@/actions/generateEmbeddings";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 
 export enum StatusText {
   UPLOADING = "Uploading file...",
-  COMPRESSING = "Compressing PDF...",
   SAVING = "Saving file to database...",
   GENERATING = "Generating AI Embeddings, This will only take a few seconds...",
 }
 
 export type Status = StatusText[keyof StatusText];
 
-function useUpload() {
-  // const router = useRouter();
+const useUpload = () => {
   const { user } = useUser();
+  const [progress, setProgress] = useState<number>(0);
   const [fileId, setFileId] = useState<string | null>(null);
   const [status, setStatus] = useState<Status | null>(null);
-  const [progress, setProgress] = useState<number | null>(null);
 
   const handleUpload = async (file: File) => {
     if (!file || !user) return;
@@ -32,18 +28,17 @@ function useUpload() {
     const uniqueFileName = `${uuidv4()}.pdf`;
     const renamedFile = new File([file], uniqueFileName, { type: file.type });
 
-    setStatus(StatusText.COMPRESSING);
-    const compressedFile = await compressPDF(renamedFile);
-
-    setStatus(StatusText.UPLOADING);
     try {
-      const downloadUrl = await uploadToCloudinary(compressedFile);
-      setStatus(StatusText.SAVING);
+      setStatus(StatusText.UPLOADING);
+      const downloadUrl = await uploadToCloudinary(renamedFile);
 
-      await saveFileUrl(compressedFile, file.name, downloadUrl, user.id);
+      setStatus(StatusText.SAVING);
+      await saveFileUrl(renamedFile, file.name, downloadUrl, user.id);
+
       setStatus(StatusText.GENERATING);
       await generateEmbeddings(uniqueFileName);
-      setProgress(0);
+
+      setProgress(100);
     } catch (error) {
       console.error("Upload failed", error);
       setStatus(null);
@@ -80,6 +75,6 @@ function useUpload() {
     progress,
     handleUpload,
   };
-}
+};
 
 export default useUpload;

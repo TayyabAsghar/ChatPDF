@@ -1,40 +1,25 @@
-import { Readable } from "stream";
-import { v2 as cloudinary } from "cloudinary";
-
-cloudinary.config({
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-    api_key: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
-    cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-});
+"use client";
 
 export const uploadToCloudinary = async (file: File): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", "chat-pdf-unsigned");
 
-    reader.readAsArrayBuffer(file);
-    reader.onload = async () => {
-      try {
-        const buffer = Buffer.from(reader.result as ArrayBuffer);
-        const stream = Readable.from(buffer);
-
-        const uploadStream = cloudinary.uploader.upload_stream(
-          {
-            resource_type: "raw", // Important for PDF uploads
-            folder: "ChatPDF",
-            public_id: file.name.split(".")[0],
-          },
-          (error, result) => {
-            if (error || !result?.secure_url) return reject(error);
-            resolve(result.secure_url);
-          }
-        );
-
-        stream.pipe(uploadStream);
-      } catch (error) {
-        reject(error);
+  try {
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload?resource_type=raw`,
+      {
+        method: "POST",
+        body: formData,
       }
-    };
+    );
 
-    reader.onerror = (error) => reject(error);
-  });
+    const data = await response.json();
+    if (!data.secure_url) throw new Error("Upload failed");
+
+    return data.secure_url;
+  } catch (error) {
+    console.error("Error uploading to Cloudinary:", error);
+    throw error;
+  }
 };

@@ -1,22 +1,20 @@
 "use client";
 
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useDropzone } from "react-dropzone";
 import { JSX, useCallback, useEffect } from "react";
 import useUpload, { StatusText } from "@/hooks/useUpload";
 import {
-  CircleArrowDown,
-  FileArchive,
+  SaveIcon,
   HammerIcon,
   RocketIcon,
-  SaveIcon,
+  CircleArrowDown,
 } from "lucide-react";
 
 const StatusIcons: { [key in StatusText]: JSX.Element } = {
   [StatusText.SAVING]: <SaveIcon className="size-20 text-indigo-600" />,
   [StatusText.UPLOADING]: <RocketIcon className="size-20 text-indigo-600" />,
   [StatusText.GENERATING]: <HammerIcon className="size-20 text-indigo-600" />,
-  [StatusText.COMPRESSING]: <FileArchive className="size-20 text-indigo-600" />,
 };
 
 const FileUploader = () => {
@@ -30,9 +28,7 @@ const FileUploader = () => {
   const onDrop = useCallback(async (acceptFiles: File[]) => {
     const file = acceptFiles[0];
 
-    if (file) {
-      await handleUpload(file);
-    }
+    if (file) await handleUpload(file);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive, isFocused, isDragAccept } =
@@ -45,7 +41,10 @@ const FileUploader = () => {
   const uploadInProgress = progress != null && progress >= 0 && progress < 100;
 
   return (
-    <div className="flex flex-col gap-4 items-center justify-center max-w-7xl mx-auto">
+    <div
+      className="flex flex-col gap-4 items-center justify-center max-w-7xl mx-auto cursor-pointer"
+      title="Upload PDF"
+    >
       <div
         {...getRootProps()}
         className={`p-10 border-2 border-dashed mt-10 w-[90%] border-indigo-600 text-indigo-600 rounded-lg h-96 flex items-center 
