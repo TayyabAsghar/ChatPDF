@@ -19,7 +19,7 @@ const Document = ({ id, name, size }: DocumentProps) => {
       onClick={() => router.push(`/dashboard/files/${id}`)}
     >
       <div>
-        <p className="font-semibold line-clamp-2" title={name}>
+        <p className="font-semibold line-clamp-2 break-words" title={name}>
           {name}
         </p>
         <p className="text-sm text-gray-500 group-hover:text-indigo-100">

@@ -24,6 +24,7 @@ interface DocumentUploaderProps {
 const DocumentUploader = ({ setIsUploading }: DocumentUploaderProps) => {
   const router = useRouter();
   const { progress, status, fileId, handleUpload } = useUpload();
+  const uploadInProgress = progress > 0 && progress < 100;
 
   useEffect(() => {
     if (fileId) router.push(`dashboard/files/${fileId}`);
@@ -31,12 +32,14 @@ const DocumentUploader = ({ setIsUploading }: DocumentUploaderProps) => {
 
   const onDrop = useCallback(
     async (acceptFiles: File[]) => {
+      if (uploadInProgress) return;
       const file = acceptFiles[0];
 
       if (file) {
         setIsUploading(true);
         await handleUpload(file);
       }
+      setIsUploading(false);
     },
     [setIsUploading]
   );
@@ -45,23 +48,21 @@ const DocumentUploader = ({ setIsUploading }: DocumentUploaderProps) => {
     useDropzone({
       onDrop,
       maxFiles: 1,
-      accept: { "application/pdf": [".pdf"] },
       noKeyboard: true,
+      disabled: uploadInProgress,
+      accept: { "application/pdf": [".pdf"] },
     });
-
-  const uploadInProgress = progress != null && progress >= 0 && progress < 100;
 
   return (
     <div
-      className="flex flex-col gap-4 items-center justify-center max-w-7xl mx-auto cursor-pointer"
+      className="flex flex-col gap-4 justify-center max-w-7xl cursor-pointer"
       title="Upload PDF"
     >
       <div
         {...getRootProps()}
-        className={`p-12 border-2 border-dashed mt-10 border-indigo-600 text-indigo-600 rounded-lg h-96 flex items-center 
-            justify-center ${
-              isFocused || isDragAccept ? "bg-indigo-300" : "bg-indigo-100"
-            }`}
+        className={`p-12 border-2 border-dashed mt-10 border-indigo-600 text-indigo-600 rounded-lg h-96 flex items-center justify-center 
+          ${isFocused || isDragAccept ? "bg-indigo-300" : "bg-indigo-100"} 
+          ${uploadInProgress ? "opacity-50 cursor-not-allowed" : ""}`}
       >
         <input {...getInputProps()} />{" "}
         <div className="flex flex-col items-center justify-center">

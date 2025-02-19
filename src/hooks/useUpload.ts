@@ -31,18 +31,22 @@ const useUpload = () => {
     });
 
     try {
+      setProgress(5);
       setStatus(StatusText.UPLOADING);
       const downloadUrl = await uploadToCloudinary(renamedFile);
 
+      setProgress(30);
       setStatus(StatusText.SAVING);
       await saveFileUrl(renamedFile, file.name, downloadUrl, user.id);
 
+      setProgress(60);
       setStatus(StatusText.GENERATING);
       await generateEmbeddings(fileCustomID);
 
       setProgress(100);
     } catch (error) {
       console.error("Upload failed", error);
+      setProgress(0);
       setStatus(null);
     }
   };
@@ -62,10 +66,10 @@ const useUpload = () => {
         file.name.split(".")[0] || ""
       );
       await setDoc(fileRef, {
-        name: originalName,
         size: file.size,
         type: file.type,
         url: downloadUrl,
+        name: originalName,
         createdAt: serverTimestamp(),
       });
 

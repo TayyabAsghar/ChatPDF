@@ -1,17 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import FileUploader from "./DocumentUploader";
+import { Button } from "@/components/ui/button";
+import { FilePlus2, PlusCircleIcon, X } from "lucide-react";
+import DocumentUploader from "@/components/uploader/DocumentUploader";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "../ui/button";
-import { FilePlus2, PlusCircleIcon } from "lucide-react";
 
 type UploadDocumentProps =
   | {
@@ -55,10 +56,24 @@ const UploadDocument = (props: UploadDocumentProps) => {
         </DialogTrigger>
 
         <DialogContent
+          hideClose
           autoFocus={false}
           className="max-w-xl"
           onInteractOutside={(e) => isUploading && e.preventDefault()}
         >
+          <DialogClose
+            asChild
+            className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center text-gray-600 hover:text-gray-900 transition-all"
+          >
+            <Button
+              variant="ghost"
+              disabled={isUploading}
+              className="p-2 w-10 h-10 rounded-full"
+            >
+              <X className="w-6 h-6" />
+            </Button>
+          </DialogClose>
+
           <DialogHeader>
             <DialogTitle>Upload a PDF</DialogTitle>
             <DialogDescription>
@@ -66,7 +81,7 @@ const UploadDocument = (props: UploadDocumentProps) => {
             </DialogDescription>{" "}
           </DialogHeader>
 
-          <FileUploader setIsUploading={setIsUploading} />
+          <DocumentUploader setIsUploading={setIsUploading} />
         </DialogContent>
       </Dialog>
     </>
