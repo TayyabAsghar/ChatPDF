@@ -38,7 +38,7 @@ const UploadDocument = (props: UploadDocumentProps) => {
               title="Upload"
               variant="outline"
               className="flex flex-col items-center w-64 h-80 rounded-xl bg-gray-200 drop-shadow-md text-gray-400
-               hover:bg-gray-200 hover:border-indigo-600 hover:text-indigo-600"
+               hover:bg-gray-700 hover:text-white"
             >
               <PlusCircleIcon className="!size-12" />
               <p>{props.buttonText}</p>

@@ -5,14 +5,15 @@ import { Loader2Icon } from "lucide-react";
 import { db } from "@/lib/firebase/firebase";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import ChatMessage from "@/components/ChatMessage";
 import { askQuestion } from "@/actions/askQuestions";
 import { type FieldValue } from "firebase-admin/firestore";
 import { useCollection } from "react-firebase-hooks/firestore";
-import { FormEvent, useEffect, useState, useTransition } from "react";
+import { FormEvent, useEffect, useRef, useState, useTransition } from "react";
 import {
-  collection,
-  orderBy,
   query,
+  orderBy,
+  collection,
   serverTimestamp,
 } from "firebase/firestore";
 
@@ -32,6 +33,7 @@ const Chat = ({ id }: ChatProps) => {
   const [input, setInput] = useState("");
   const [isPending, startTransition] = useTransition();
   const [messages, setMessages] = useState<Message[]>([]);
+  const bottomOfChatRef = useRef<HTMLDivElement>(null);
 
   const [snapshot, loading, error] = useCollection(
     user &&
@@ -42,7 +44,24 @@ const Chat = ({ id }: ChatProps) => {
   );
 
   useEffect(() => {
+    bottomOfChatRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  useEffect(() => {
     if (!snapshot) return;
+
+    const lastMessage = messages.pop();
+
+    if (lastMessage?.role === "ai" && lastMessage.message === "Thinking...")
+      return;
+
+    const newMessages = snapshot.docs.map((doc) => {
+      const { role, message, createdAt } = doc.data();
+
+      return { id: doc.id, role, message, createdAt: createdAt.toDate() };
+    });
+
+    setMessages(newMessages);
   }, [snapshot]);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -51,6 +70,12 @@ const Chat = ({ id }: ChatProps) => {
     const q = input;
 
     setInput("");
+
+    setMessages((prev) => [
+      ...prev,
+      { role: "human", message: q, createdAt: serverTimestamp() },
+      { role: "ai", message: "Thinking...", createdAt: serverTimestamp() },
+    ]);
 
     startTransition(async () => {
       const { success, message } = await askQuestion(id, q);
@@ -71,7 +96,38 @@ const Chat = ({ id }: ChatProps) => {
 
   return (
     <div className="flex flex-col h-full overflow-y-scroll">
-      <div className="w-full flex-1"></div>
+      <div className="w-full flex-1">
+        {loading ? (
+          <div className="flex items-center justify-center">
+            <Loader2Icon className="animate-spin size-20 text-indigo-600 mt-20" />
+          </div>
+        ) : (
+          <div className="p-5">
+            {!messages.length && (
+              <ChatMessage
+                key="placeholder"
+                message={{
+                  role: "ai",
+                  message: "Ask me anything about the document!",
+                  createdAt: serverTimestamp(),
+                }}
+              />
+            )}
+
+            {messages.map((message, index) => (
+              <ChatMessage key={index} message={message} />
+            ))}
+
+            <div ref={bottomOfChatRef}></div>
+          </div>
+        )}
+
+        {messages.map((message) => (
+          <div key={message.id}>
+            <p>{message.message}</p>
+          </div>
+        ))}
+      </div>
       <form
         onSubmit={handleSubmit}
         className="flex sticky bottom-0 space-x-2 p-5 bg-indigo-600/75"

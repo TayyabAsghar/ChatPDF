@@ -25,8 +25,10 @@ const useUpload = () => {
   const handleUpload = async (file: File) => {
     if (!file || !user) return;
 
-    const uniqueFileName = `${uuidv4()}.pdf`;
-    const renamedFile = new File([file], uniqueFileName, { type: file.type });
+    const fileCustomID = uuidv4();
+    const renamedFile = new File([file], `${fileCustomID}.pdf`, {
+      type: file.type,
+    });
 
     try {
       setStatus(StatusText.UPLOADING);
@@ -36,7 +38,7 @@ const useUpload = () => {
       await saveFileUrl(renamedFile, file.name, downloadUrl, user.id);
 
       setStatus(StatusText.GENERATING);
-      await generateEmbeddings(uniqueFileName);
+      await generateEmbeddings(fileCustomID);
 
       setProgress(100);
     } catch (error) {
@@ -52,17 +54,22 @@ const useUpload = () => {
     userid: string
   ) => {
     try {
-      const fileRef = doc(db, "users", userid, "files", file.name || "");
+      const fileRef = doc(
+        db,
+        "users",
+        userid,
+        "files",
+        file.name.split(".")[0] || ""
+      );
       await setDoc(fileRef, {
-        name: file.name,
+        name: originalName,
         size: file.size,
         type: file.type,
         url: downloadUrl,
-        originalName: originalName,
         createdAt: serverTimestamp(),
       });
 
-      setFileId(file.name);
+      setFileId(file.name.split(".")[0]);
     } catch (error) {
       console.error("Error saving file to Firestore", error);
       setStatus(null);

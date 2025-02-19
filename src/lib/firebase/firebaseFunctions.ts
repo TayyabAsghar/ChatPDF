@@ -10,3 +10,13 @@ export const getFileDownloadUrl = async (userId: string, fileId: string) => {
 
   return firebaseDocRef.data()?.url;
 };
+
+export const getAllFilesSnapshot = async (userId: string) => {
+  const filesSnapshot = await adminDb
+    .collection("users")
+    .doc(userId)
+    .collection("files")
+    .get();
+
+  return filesSnapshot;
+};
