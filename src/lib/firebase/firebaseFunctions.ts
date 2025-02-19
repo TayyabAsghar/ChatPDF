@@ -20,3 +20,12 @@ export const getAllFilesSnapshot = async (userId: string) => {
 
   return filesSnapshot;
 };
+
+export const getChatRef = (userId: string, id: string) => {
+  return adminDb
+    .collection("users")
+    .doc(userId!)
+    .collection("files")
+    .doc(id)
+    .collection("chat");
+};

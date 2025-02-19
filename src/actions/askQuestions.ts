@@ -3,27 +3,22 @@
 import { Message } from "@/components/Chat";
 import { auth } from "@clerk/nextjs/server";
 import { serverTimestamp } from "firebase/firestore";
-import { adminDb } from "@/lib/firebase/firebaseAdmin";
 import { generateLangchainCompletion } from "@/lib/langchain";
+import { getChatRef } from "@/lib/firebase/firebaseFunctions";
 
-const FREE_LIMIT = 3;
-const PRO_LIMIT = 100;
+// const FREE_LIMIT = 3;
+// const PRO_LIMIT = 100;
 
 export const askQuestion = async (id: string, question: string) => {
   auth.protect();
 
   const { userId } = await auth();
-  const chatRef = adminDb
-    .collection("users")
-    .doc(userId!)
-    .collection("files")
-    .doc(id)
-    .collection("chat");
+  const chatRef = getChatRef(userId!, id);
 
-  const chatSnapShot = await chatRef.get();
-  const userMessages = chatSnapShot.docs.filter(
-    (doc) => (doc.data().role = "human")
-  );
+  //   const chatSnapShot = await chatRef.get();
+  //   const userMessages = chatSnapShot.docs.filter(
+  //     (doc) => (doc.data().role = "human")
+  //   );
 
   const userMessage: Message = {
     role: "human",

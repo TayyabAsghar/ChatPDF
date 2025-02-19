@@ -42,6 +42,7 @@ const Chat = ({ id }: ChatProps) => {
         orderBy("createdAt", "asc")
       )
   );
+  console.log(error);
 
   useEffect(() => {
     bottomOfChatRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -62,7 +63,7 @@ const Chat = ({ id }: ChatProps) => {
     });
 
     setMessages(newMessages);
-  }, [snapshot]);
+  }, [messages, snapshot]);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
