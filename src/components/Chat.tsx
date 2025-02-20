@@ -62,7 +62,8 @@ const Chat = ({ id }: ChatProps) => {
       return { id: doc.id, role, message, createdAt: createdAt.toDate() };
     });
 
-    setMessages(newMessages);
+    if (JSON.stringify(newMessages) !== JSON.stringify(messages))
+      setMessages(newMessages);
   }, [messages, snapshot]);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {

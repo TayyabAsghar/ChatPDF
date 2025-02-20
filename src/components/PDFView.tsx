@@ -7,12 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Document, Page, pdfjs } from "react-pdf";
 import { Loader2Icon, RotateCcw, ZoomIn, ZoomOut } from "lucide-react";
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = `https://cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjs.version}/build/pdf.min.mjs`;
 
-// pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-//   'pdfjs-dist/build/pdf.worker.min.js',
-//   import.meta.url,
-// ).toString();
 interface PDFViewProps {
   url: string;
 }
