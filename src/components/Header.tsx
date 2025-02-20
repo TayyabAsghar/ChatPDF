@@ -18,7 +18,7 @@ const Header = () => {
             title="Upgrade"
             asChild
           >
-            <Link href="/dashboard/pricing">Upgrade</Link>
+            <Link href="/dashboard/upgrade">Upgrade</Link>
           </Button>
 
           <Button variant="outline" title="My Documents" asChild>
