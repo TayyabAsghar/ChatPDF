@@ -11,8 +11,8 @@ interface ChatMessageProps {
 }
 
 const ChatMessage = ({ message }: ChatMessageProps) => {
-  const isHuman = message.role === "human";
   const { user } = useUser();
+  const isHuman = message.role === "human";
 
   return (
     <div className={`chat ${isHuman ? "chat-end" : "chat-start"}`}>
