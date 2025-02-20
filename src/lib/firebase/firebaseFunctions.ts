@@ -13,13 +13,23 @@ export const getFileDownloadUrl = async (userId: string, fileId: string) => {
 };
 
 export const getAllFilesSnapshot = async (userId: string) => {
-  const filesSnapshot = await adminDb
+  return await adminDb
     .collection("users")
     .doc(userId)
     .collection("files")
     .get();
+};
 
-  return filesSnapshot;
+export const getUserData = async (userId: string) => {
+  const userSnapshot = await adminDb.collection("users").doc(userId).get();
+  return userSnapshot.data();
+};
+
+export const setUserData = async (
+  userId: string,
+  data: Record<string, string>
+) => {
+  await adminDb.collection("users").doc(userId).set(data);
 };
 
 export const addMessageToChat = async (

@@ -4,7 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import { generateEmbeddingsInPinecone } from "@/lib/langchain";
 
-const generateEmbeddings = async (fileId: string) => {
+const GenerateEmbeddings = async (fileId: string) => {
   auth.protect();
 
   await generateEmbeddingsInPinecone(fileId);
@@ -14,4 +14,4 @@ const generateEmbeddings = async (fileId: string) => {
   return { completed: true };
 };
 
-export default generateEmbeddings;
+export default GenerateEmbeddings;

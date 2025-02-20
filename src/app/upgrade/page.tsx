@@ -2,10 +2,11 @@
 
 import { useUser } from "@clerk/nextjs";
 import { CheckIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
 import React, { useTransition } from "react";
 import { Button } from "@/components/ui/button";
+import getStripe from "@/lib/stripe/stripe-client";
 import useSubscriptions from "@/hooks/useSubscriptions";
+import CreateCheckoutSession from "@/actions/CreateCheckoutSession";
 
 export type UserDetails = {
   email: string;
@@ -14,7 +15,6 @@ export type UserDetails = {
 
 const UpgradePage = () => {
   const { user } = useUser();
-  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const { hasActiveMembership, loading } = useSubscriptions();
 
@@ -26,7 +26,15 @@ const UpgradePage = () => {
       name: user.fullName || "",
     };
 
-    startTransition(async () => {});
+    startTransition(async () => {
+      const stripe = await getStripe();
+
+      if (hasActiveMembership) return;
+
+      const sessionId = await CreateCheckoutSession(userDetails);
+
+      await stripe?.redirectToCheckout({ sessionId });
+    });
   };
 
   const FeatureList = ({ features }: { features: string[] }) => {

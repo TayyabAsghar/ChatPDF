@@ -5,8 +5,8 @@ import { Loader2Icon } from "lucide-react";
 import { db } from "@/lib/firebase/firebase";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import AskQuestion from "@/actions/AskQuestions";
 import ChatMessage from "@/components/ChatMessage";
-import { askQuestion } from "@/actions/askQuestions";
 import { type FieldValue } from "firebase-admin/firestore";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { FormEvent, useEffect, useRef, useState, useTransition } from "react";
@@ -79,7 +79,7 @@ const Chat = ({ id }: ChatProps) => {
     ]);
 
     startTransition(async () => {
-      const { success, message } = await askQuestion(id, q);
+      const { success, message } = await AskQuestion(id, q);
 
       if (!success) {
         setMessages((prev) =>

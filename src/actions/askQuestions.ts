@@ -6,10 +6,7 @@ import { FieldValue } from "firebase-admin/firestore";
 import { generateLangchainCompletion } from "@/lib/langchain";
 import { addMessageToChat } from "@/lib/firebase/firebaseFunctions";
 
-// const FREE_LIMIT = 3;
-// const PRO_LIMIT = 100;
-
-export const askQuestion = async (id: string, question: string) => {
+const AskQuestion = async (id: string, question: string) => {
   auth.protect();
 
   const { userId } = await auth();
@@ -39,3 +36,5 @@ export const askQuestion = async (id: string, question: string) => {
 
   return { success: true, message: null };
 };
+
+export default AskQuestion;

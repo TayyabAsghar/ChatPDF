@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import { useUser } from "@clerk/nextjs";
 import { db } from "@/lib/firebase/firebase";
 import { uploadToCloudinary } from "@/lib/cloudinary";
-import generateEmbeddings from "@/actions/generateEmbeddings";
+import GenerateEmbeddings from "@/actions/GenerateEmbeddings";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 
 export enum StatusText {
@@ -41,7 +41,7 @@ const useUpload = () => {
 
       setProgress(60);
       setStatus(StatusText.GENERATING);
-      await generateEmbeddings(fileCustomID);
+      await GenerateEmbeddings(fileCustomID);
 
       setProgress(100);
     } catch (error) {
