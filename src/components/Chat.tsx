@@ -35,14 +35,13 @@ const Chat = ({ id }: ChatProps) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const bottomOfChatRef = useRef<HTMLDivElement>(null);
 
-  const [snapshot, loading, error] = useCollection(
+  const [snapshot, loading] = useCollection(
     user &&
       query(
         collection(db, "users", user?.id, "files", id, "chat"),
         orderBy("createdAt", "asc")
       )
   );
-  console.log(error);
 
   useEffect(() => {
     bottomOfChatRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -64,7 +63,7 @@ const Chat = ({ id }: ChatProps) => {
 
     if (JSON.stringify(newMessages) !== JSON.stringify(messages))
       setMessages(newMessages);
-  }, [messages, snapshot]);
+  }, [snapshot]);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -97,7 +96,7 @@ const Chat = ({ id }: ChatProps) => {
   };
 
   return (
-    <div className="flex flex-col h-full overflow-y-scroll">
+    <div className="flex flex-col h-full">
       <div className="w-full flex-1">
         {loading ? (
           <div className="flex items-center justify-center">
@@ -116,23 +115,20 @@ const Chat = ({ id }: ChatProps) => {
               />
             )}
 
-            {messages.map((message, index) => (
-              <ChatMessage key={index} message={message} />
+            {messages.map((message) => (
+              <ChatMessage
+                message={message}
+                key={message.id ?? Math.random()}
+              />
             ))}
 
             <div ref={bottomOfChatRef}></div>
           </div>
         )}
-
-        {messages.map((message) => (
-          <div key={message.id}>
-            <p>{message.message}</p>
-          </div>
-        ))}
       </div>
       <form
         onSubmit={handleSubmit}
-        className="flex sticky bottom-0 space-x-2 p-5 bg-indigo-600/75"
+        className="flex sticky bottom-0 space-x-2 p-5 bg-indigo-400"
       >
         <Input
           placeholder="Ask a question..."

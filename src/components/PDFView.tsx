@@ -114,8 +114,8 @@ const PDFView = ({ url }: PDFViewProps) => {
           />
         </Document>
       ) : error ? (
-        <div className="flex flex-col items-center justify-center gap-4">
-          <FileX className="text-indigo-600 size-36 animate-bounce" />
+        <div className="flex flex-col items-center justify-center gap-4 p-10">
+          <FileX className="text-indigo-600 size-20 animate-bounce lg:size-36" />
           <div className="text-gray-600 font-bold text-lg">
             Error loading document
           </div>
