@@ -4,7 +4,7 @@ import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { db } from "@/lib/firebase/firebase";
 import { collection, doc } from "firebase/firestore";
-import { DOC_FREE_LIMIT, DOC_PRO_LIMIT } from "@/data/limits";
+import { DOC_FREE_LIMIT, DOC_PRO_LIMIT } from "@/lib/constants/limits";
 import { useCollection, useDocument } from "react-firebase-hooks/firestore";
 
 const useSubscription = () => {

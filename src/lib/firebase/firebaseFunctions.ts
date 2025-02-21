@@ -1,4 +1,3 @@
-import { Message } from "@/components/Chat";
 import { adminDb } from "@/lib/firebase/firebaseAdmin";
 import { WhereFilterOp } from "firebase-admin/firestore";
 
@@ -54,16 +53,11 @@ export const updateUserData = async (
   await adminDb.collection("users").doc(userId).set(data);
 };
 
-export const addMessageToChat = async (
-  userId: string,
-  id: string,
-  message: Message
-) => {
-  await adminDb
+export const getChatRef = (userId: string, fileId: string) => {
+  return adminDb
     .collection("users")
     .doc(userId!)
     .collection("files")
-    .doc(id)
-    .collection("chat")
-    .add(message);
+    .doc(fileId)
+    .collection("chat");
 };

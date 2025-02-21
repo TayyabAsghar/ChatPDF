@@ -4,17 +4,36 @@ import { Message } from "@/components/Chat";
 import { auth } from "@clerk/nextjs/server";
 import { FieldValue } from "firebase-admin/firestore";
 import { generateLangchainCompletion } from "@/lib/langchain";
-import { addMessageToChat } from "@/lib/firebase/firebaseFunctions";
+import { CHAT_FREE_LIMIT, CHAT_PRO_LIMIT } from "@/lib/constants/limits";
+import { getChatRef, getUserData } from "@/lib/firebase/firebaseFunctions";
 
-const AskQuestion = async (id: string, question: string) => {
+const AskQuestion = async (fileId: string, question: string) => {
   auth.protect();
 
   const { userId } = await auth();
 
-  //   const chatSnapShot = await chatRef.get();
-  //   const userMessages = chatSnapShot.docs.filter(
-  //     (doc) => (doc.data().role = "human")
-  //   );
+  const chatRef = getChatRef(userId!, fileId);
+
+  const [userData, chatSnapShot] = await Promise.all([
+    getUserData(userId!),
+    getChatRef(userId!, fileId).get(),
+  ]);
+
+  const userMessages = chatSnapShot.docs.filter(
+    (doc) => doc.data().role === "human"
+  );
+
+  if (!userData?.hasActiveMembership && userMessages.length >= CHAT_FREE_LIMIT)
+    return {
+      success: false,
+      message: `You'll need to upgrade to PRO to ask more than ${CHAT_FREE_LIMIT} questions!`,
+    };
+
+  if (userData?.hasActiveMembership && userMessages.length >= CHAT_PRO_LIMIT)
+    return {
+      success: false,
+      message: `You've reached the PRO limit of ${CHAT_FREE_LIMIT} questions per document!`,
+    };
 
   const userMessage: Message = {
     role: "human",
@@ -22,9 +41,9 @@ const AskQuestion = async (id: string, question: string) => {
     createdAt: FieldValue.serverTimestamp(),
   };
 
-  await addMessageToChat(userId!, id, userMessage);
+  await chatRef.add(userMessage);
 
-  const reply = await generateLangchainCompletion(id, question);
+  const reply = await generateLangchainCompletion(fileId, question);
 
   const aiMessage: Message = {
     role: "ai",
@@ -32,7 +51,7 @@ const AskQuestion = async (id: string, question: string) => {
     createdAt: FieldValue.serverTimestamp(),
   };
 
-  await addMessageToChat(userId!, id, aiMessage);
+  await chatRef.add(aiMessage);
 
   return { success: true, message: null };
 };

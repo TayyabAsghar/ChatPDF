@@ -2,6 +2,7 @@
 
 import { useUser } from "@clerk/nextjs";
 import { Loader2Icon } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import { db } from "@/lib/firebase/firebase";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -30,6 +31,7 @@ export type Message = {
 
 const Chat = ({ id }: ChatProps) => {
   const { user } = useUser();
+  const { toast } = useToast();
   const [input, setInput] = useState("");
   const [isPending, startTransition] = useTransition();
   const [messages, setMessages] = useState<Message[]>([]);
@@ -82,6 +84,7 @@ const Chat = ({ id }: ChatProps) => {
       const { success, message } = await AskQuestion(id, q);
 
       if (!success) {
+        toast({ variant: "destructive", title: "Error", description: message });
         setMessages((prev) =>
           prev.slice(0, prev.length - 1).concat([
             {
