@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import React, { useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import getStripe from "@/lib/stripe/stripe-client";
-import useSubscriptions from "@/hooks/useSubscriptions";
+import useSubscription from "@/hooks/useSubscription";
 import CreateStripePortal from "@/actions/CreateStripePortal";
 import CreateCheckoutSession from "@/actions/CreateCheckoutSession";
 
@@ -19,7 +19,7 @@ const UpgradePage = () => {
   const { user } = useUser();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const { hasActiveMembership, loading } = useSubscriptions();
+  const { hasActiveMembership, loading } = useSubscription();
 
   const handleUpgrade = () => {
     if (!user) return;

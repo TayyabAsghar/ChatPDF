@@ -7,7 +7,7 @@ import { collection, doc } from "firebase/firestore";
 import { DOC_FREE_LIMIT, DOC_PRO_LIMIT } from "@/data/limits";
 import { useCollection, useDocument } from "react-firebase-hooks/firestore";
 
-const useSubscriptions = () => {
+const useSubscription = () => {
   const { user } = useUser();
   const [isOverFileLimit, setIsOverFileLimit] = useState(false);
   const [hasActiveMembership, setHasActiveMembership] = useState(null);
@@ -41,4 +41,4 @@ const useSubscriptions = () => {
   return { hasActiveMembership, loading, error, isOverFileLimit, filesLoading };
 };
 
-export default useSubscriptions;
+export default useSubscription;

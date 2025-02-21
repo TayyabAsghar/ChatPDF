@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { SignedIn, UserButton } from "@clerk/nextjs";
+import UpgradeButton from "@/components/UpgradeButton";
 import UploadDocument from "@/components/uploader/UploadDocument";
 
 const Header = () => {
@@ -12,20 +13,13 @@ const Header = () => {
 
       <SignedIn>
         <div className="flex items-center gap-2">
-          <Button
-            className="hidden md:flex"
-            variant="link"
-            title="Upgrade"
-            asChild
-          >
-            <Link href="/upgrade">Upgrade</Link>
-          </Button>
-
           <Button variant="outline" title="My Documents" asChild>
             <Link href="/dashboard">My Documents</Link>
           </Button>
 
           <UploadDocument buttonType="icon" />
+
+          <UpgradeButton />
 
           <UserButton />
         </div>
