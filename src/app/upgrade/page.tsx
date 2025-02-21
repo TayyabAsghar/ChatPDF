@@ -2,10 +2,12 @@
 
 import { useUser } from "@clerk/nextjs";
 import { CheckIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React, { useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import getStripe from "@/lib/stripe/stripe-client";
 import useSubscriptions from "@/hooks/useSubscriptions";
+import CreateStripePortal from "@/actions/CreateStripePortal";
 import CreateCheckoutSession from "@/actions/CreateCheckoutSession";
 
 export type UserDetails = {
@@ -15,6 +17,7 @@ export type UserDetails = {
 
 const UpgradePage = () => {
   const { user } = useUser();
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const { hasActiveMembership, loading } = useSubscriptions();
 
@@ -29,7 +32,11 @@ const UpgradePage = () => {
     startTransition(async () => {
       const stripe = await getStripe();
 
-      if (hasActiveMembership) return;
+      if (hasActiveMembership) {
+        const stripePortalUrl = await CreateStripePortal();
+
+        return router.push(stripePortalUrl);
+      }
 
       const sessionId = await CreateCheckoutSession(userDetails);
 
@@ -54,7 +61,7 @@ const UpgradePage = () => {
   };
 
   return (
-    <div>
+    <div className="overflow-auto">
       <div className="py-24 sm:py-32">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-base font-semibold leading-7 text-indigo-600">
