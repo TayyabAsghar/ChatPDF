@@ -4,9 +4,9 @@ import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useUser } from "@clerk/nextjs";
 import { db } from "@/lib/firebase/firebase";
-import { uploadToCloudinary } from "@/lib/cloudinary";
 import GenerateEmbeddings from "@/actions/GenerateEmbeddings";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { uploadToCloudinary } from "@/lib/cloudinary/cloudinary-client";
 
 export enum StatusText {
   UPLOADING = "Uploading file...",

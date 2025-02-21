@@ -61,3 +61,12 @@ export const getChatRef = (userId: string, fileId: string) => {
     .doc(fileId)
     .collection("chat");
 };
+
+export const deleteDocument = async (userId: string, fileId: string) => {
+  adminDb
+    .collection("users")
+    .doc(userId!)
+    .collection("files")
+    .doc(fileId)
+    .delete();
+};

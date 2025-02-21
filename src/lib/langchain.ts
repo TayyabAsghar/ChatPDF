@@ -152,4 +152,9 @@ export const generateLangchainCompletion = async (
   return reply.answer;
 };
 
+export const deleteDocumentIndex = async (docId: string) => {
+  const index = pineconeClient.index(indexName);
+  await index.namespace(docId).deleteAll();
+};
+
 export default model;
