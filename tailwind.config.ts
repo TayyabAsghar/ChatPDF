@@ -58,6 +58,15 @@ export default {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      keyframes: {
+        moveRight: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(10px)" },
+        },
+      },
+      animation: {
+        "move-right": "moveRight .7s linear infinite alternate",
+      },
     },
   },
   plugins: [tailwindcssAnimate, daisyui],

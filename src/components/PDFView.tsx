@@ -26,7 +26,7 @@ const PDFView = ({ url }: PDFViewProps) => {
 
   useEffect(() => {
     const fetchPDF = async () => {
-      const response = await fetch("url");
+      const response = await fetch(url);
       const file = await response.blob();
       setFile(file);
     };

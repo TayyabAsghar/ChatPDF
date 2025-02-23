@@ -1,5 +1,6 @@
 import Link from "next/link";
 import features from "@/data/features";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Home = () => {
@@ -31,9 +32,17 @@ const Home = () => {
             </p>
           </div>
 
-          <Button asChild className="mt-10">
-            <Link href="/dashboard">Get Started</Link>
-          </Button>
+          <div className="flex mt-10 gap-4">
+            <Button asChild>
+              <Link href="/dashboard">
+                Get Started <ArrowRight className="animate-move-right" />
+              </Link>
+            </Button>
+
+            <Button asChild variant="outline">
+              <Link href="/upgrade">Pricing</Link>
+            </Button>
+          </div>
         </div>
 
         <div className="relative overflow-hidden pt-16">

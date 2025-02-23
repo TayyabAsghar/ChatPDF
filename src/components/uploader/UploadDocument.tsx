@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { FilePlus2, PlusCircleIcon, X } from "lucide-react";
+import useSubscription from "@/hooks/useSubscription";
+import { FilePlus2, FrownIcon, PlusCircleIcon, X } from "lucide-react";
 import DocumentUploader from "@/components/uploader/DocumentUploader";
 import {
   Dialog,
@@ -24,24 +26,36 @@ type UploadDocumentProps =
     };
 
 const UploadDocument = (props: UploadDocumentProps) => {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
+  const { isOverFileLimit } = useSubscription();
   const [isUploading, setIsUploading] = useState(false);
 
+  const handleDialogState = (state: boolean) =>
+    !isUploading && !isOverFileLimit && setOpen(state);
+
   return (
-    <Dialog
-      open={open}
-      onOpenChange={(state) => !isUploading && setOpen(state)}
-    >
+    <Dialog open={open} onOpenChange={handleDialogState}>
       <DialogTrigger asChild>
         {props.buttonType === "text" ? (
           <Button
-            title="Upload"
             variant="outline"
+            title={isOverFileLimit ? "Upgrade" : "Upload"}
+            onClick={() => isOverFileLimit && router.push("/upgrade")}
             className="flex flex-col items-center w-64 h-80 rounded-xl bg-gray-200 drop-shadow-md text-gray-400
                hover:bg-gray-700 hover:text-white"
           >
-            <PlusCircleIcon className="!size-12" />
-            <p>{props.buttonText}</p>
+            {isOverFileLimit ? (
+              <FrownIcon className="!size-12" />
+            ) : (
+              <PlusCircleIcon className="!size-12" />
+            )}
+
+            <p>
+              {isOverFileLimit
+                ? "Upgrade to add more documents."
+                : props.buttonText}
+            </p>
           </Button>
         ) : (
           <Button

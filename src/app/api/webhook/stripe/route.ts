@@ -43,7 +43,7 @@ const POST = async (req: NextRequest) => {
       if (!userDetails?.id)
         return new NextResponse("User not found.", { status: 404 });
 
-      await updateUserData(userDetails.id, { hasActiveMembership: false });
+      await updateUserData(userDetails.id, { hasActiveMembership: true });
       break;
     }
   }
