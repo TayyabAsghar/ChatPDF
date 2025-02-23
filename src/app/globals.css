@@ -71,13 +71,57 @@ body {
   }
 }
 
-
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .hex-brick {
+    @apply bg-black w-[30px] h-[17px] absolute top-[5px] duration-2000;
+  }
+
+  .h2 {
+    @apply rotate-[60deg];
+  }
+
+  .h3 {
+    @apply -rotate-[60deg];
+  }
+
+  .gel {
+    @apply h-[30px] w-[30px] transition-all duration-300 absolute top-1/2 left-1/2;
+  }
+
+  .center-gel {
+    @apply -ml-[15px] -mt-[15px] animate-pulse00 duration-2000 repeat-infinite;
+  }
+
+  .r1 {
+    @apply animate-pulse00 repeat-infinite duration-2000 delay-200;
+  }
+
+  .r2 {
+    @apply animate-pulse00 repeat-infinite duration-2000 delay-400;
+  }
+
+  .r3 {
+    @apply animate-pulse00 repeat-infinite duration-2000 delay-600;
+  }
+
+  .r1 > .hex-brick {
+    @apply duration-200 repeat-infinite delay-200;
+  }
+
+  .r2 > .hex-brick {
+    @apply duration-200 repeat-infinite delay-400;
+  }
+
+  .r3 > .hex-brick {
+    @apply duration-200 repeat-infinite delay-600;
   }
 }

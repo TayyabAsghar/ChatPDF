@@ -1,7 +1,9 @@
 import "./globals.css";
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Geist, Geist_Mono } from "next/font/google";
+import LoadingScreen from "@/components/LoadingScreen";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,7 +31,7 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen h-screen overflow-hidden flex flex-col`}
         >
-          {children}
+          <Suspense fallback={<LoadingScreen />}>{children}</Suspense>
         </body>
       </html>
     </ClerkProvider>

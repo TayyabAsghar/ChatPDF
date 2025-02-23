@@ -58,6 +58,13 @@ export default {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      transitionDelay: {
+        "400": "400ms",
+        "600": "600ms",
+      },
+      transitionDuration: {
+        "2000": "2000ms",
+      },
       keyframes: {
         moveRight: {
           "0%": { transform: "translateX(0)" },
@@ -67,8 +74,14 @@ export default {
           "0%": { transform: "translateX(10px)" },
           "100%": { transform: "translateX(0)" },
         },
+        pulse00: {
+          "0%": { transform: "scale(1)" },
+          "50%": { transform: "scale(0.01)" },
+          "100%": { transform: "scale(1)" },
+        },
       },
       animation: {
+        pulse00: "pulse00 2s infinite",
         "move-right": "moveRight .7s linear infinite alternate",
         "move-left": "moveLeft .7s linear infinite alternate",
       },

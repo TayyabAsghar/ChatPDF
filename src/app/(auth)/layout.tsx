@@ -1,10 +1,12 @@
+import { Suspense } from "react";
 import { ClerkLoaded } from "@clerk/nextjs";
+import LoadingScreen from "@/components/LoadingScreen";
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <ClerkLoaded>
       <main className="flex-1 flex justify-center items-center p-2 lg:p-5 bg-gradient-to-bl from-white to-indigo-600 overflow-auto">
-        {children}
+        <Suspense fallback={<LoadingScreen />}>{children}</Suspense>
       </main>
     </ClerkLoaded>
   );
