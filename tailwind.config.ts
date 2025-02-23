@@ -63,9 +63,14 @@ export default {
           "0%": { transform: "translateX(0)" },
           "100%": { transform: "translateX(10px)" },
         },
+        moveLeft: {
+          "0%": { transform: "translateX(10px)" },
+          "100%": { transform: "translateX(0)" },
+        },
       },
       animation: {
         "move-right": "moveRight .7s linear infinite alternate",
+        "move-left": "moveLeft .7s linear infinite alternate",
       },
     },
   },

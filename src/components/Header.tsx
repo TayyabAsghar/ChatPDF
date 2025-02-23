@@ -13,6 +13,10 @@ const Header = () => {
 
       <SignedIn>
         <div className="flex items-center gap-2">
+          <Button asChild variant="link">
+            <Link href="/upgrade">Pricing</Link>
+          </Button>
+
           <Button variant="outline" title="My Documents" asChild>
             <Link href="/dashboard">My Documents</Link>
           </Button>
