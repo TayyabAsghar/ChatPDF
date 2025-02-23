@@ -15,7 +15,7 @@ const Documents = async () => {
       <UploadDocument buttonType="text" buttonText="Add a Document" />
 
       {documentsSnapshot.docs.map((doc) => {
-        const { size, name, url } = doc.data();
+        const { size, name, url, createdAt } = doc.data();
 
         return (
           <Document
@@ -24,6 +24,7 @@ const Documents = async () => {
             name={name}
             size={size}
             key={doc.id}
+            date={createdAt.toDate()}
           />
         );
       })}
