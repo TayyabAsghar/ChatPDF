@@ -9,6 +9,7 @@ import { ArrowLeft, CheckIcon } from "lucide-react";
 import useSubscription from "@/hooks/useSubscription";
 import CreateStripePortal from "@/actions/CreateStripePortal";
 import CreateCheckoutSession from "@/actions/CreateCheckoutSession";
+import getBaseURL from "@/lib/getBaseUrl";
 
 export type UserDetails = {
   name: string;
@@ -18,11 +19,15 @@ export type UserDetails = {
 const UpgradePage = () => {
   const router = useRouter();
   const { isSignedIn, user } = useUser();
+  const redirectURL = `${getBaseURL()}/upgrade`; // Not a good approach
   const [isPending, startTransition] = useTransition();
   const { hasActiveMembership, loading } = useSubscription();
 
   const handleUpgrade = () => {
-    if (!user || !isSignedIn) return;
+    if (!isSignedIn)
+      router.push(`/sign-in?redirect_url=${encodeURIComponent(redirectURL)}`);
+
+    if (!user) return;
 
     const userDetails: UserDetails = {
       email: user.primaryEmailAddress?.toString() || "",
