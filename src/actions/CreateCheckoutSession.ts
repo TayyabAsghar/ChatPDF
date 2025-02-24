@@ -22,7 +22,11 @@ const CreateCheckoutSession = async (userDetails: UserDetails) => {
       metadata: { userId },
     });
 
-    await setUserData(userId, { stripeCustomerId: newCustomer.id });
+    await setUserData(
+      userId,
+      { stripeCustomerId: newCustomer.id },
+      { merge: true }
+    );
     stripeCustomerId = newCustomer.id;
   }
 

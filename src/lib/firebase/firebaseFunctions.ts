@@ -1,5 +1,5 @@
 import { adminDb } from "@/lib/firebase/firebaseAdmin";
-import { WhereFilterOp } from "firebase-admin/firestore";
+import { SetOptions, WhereFilterOp } from "firebase-admin/firestore";
 
 export const getFileDownloadUrl = async (userId: string, fileId: string) => {
   const firebaseDocRef = await adminDb
@@ -41,9 +41,10 @@ export const getUserByProperty = async (
 
 export const setUserData = async (
   userId: string,
-  data: Record<string, string>
+  data: Record<string, string>,
+  options: SetOptions = {}
 ) => {
-  await adminDb.collection("users").doc(userId).set(data);
+  await adminDb.collection("users").doc(userId).set(data, options);
 };
 
 export const updateUserData = async (

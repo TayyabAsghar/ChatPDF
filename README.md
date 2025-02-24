@@ -122,31 +122,39 @@ Responsive pricing page to showcase clear prices and features of the application
 
 ![Pricing Page](/public/screenshots/PricingPage.png)
 
-### **3. Dashboard**
+### **3. SignIn Page**
+
+![SignIn Page](/public/screenshots/SigninPage.png)
+
+### **4. SignUp Page**
+
+![SignUp Page](/public/screenshots/SignupPage.png)
+
+### **5. Dashboard**
 
 A simple Dashboard to showcase all the uploaded documents and chats along with option to `Upload a new Document`, `Download a Uploaded Document`, `Delete a Chat (Pro Feature)`, and `User Profile`.
 
 ![Dashboard](/public/screenshots/Dashboard.png)
 
-### **4. Upload a PDF**
+### **6. Upload a PDF**
 
 Click the **Add a Document** button that will open a Modal. Click to select a PDF document or Drag and Drop one. The modal will show a interactive state of all the processing while uploading.
 
 ![Upload Document](/public/screenshots/UploadDocument.png)
 
-### **5. Chat with Your PDF**
+### **7. Chat with Your PDF**
 
 Ask questions, summarize, or retrieve key insights from the document. You can also tell AI to answer the question as markdown. Along that you can `Navigate PDF Pages`, `Rotate PDF`, `Zoom In/Out PDF`.
 
 ![Chat Page](/public/screenshots/ChatPage.png)
 
-### **5. Upgrade To Pro**
+### **8. Upgrade To Pro**
 
 Upgrade to Pro via **Stripe** monthly subscriptions for higher document limits.
 
 ![Stripe Payment Page](/public/screenshots/StripePaymentPage.png)
 
-### **4. Manage Subscription**
+### **9. Manage Subscription**
 
 - Upgrade to Pro via **Stripe** for higher document limits and use Strip portal to manage your subscription.
 

@@ -30,7 +30,12 @@ const useSubscription = () => {
   }, [snapshot]);
 
   useEffect(() => {
-    if (!filesSnapshot || hasActiveMembership === null) return;
+    if (
+      !filesSnapshot ||
+      hasActiveMembership === null ||
+      hasActiveMembership === undefined
+    )
+      return;
 
     const files = filesSnapshot.docs;
     const usersLimit = hasActiveMembership ? DOC_PRO_LIMIT : DOC_FREE_LIMIT;
