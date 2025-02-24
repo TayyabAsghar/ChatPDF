@@ -3,11 +3,13 @@ import { headers } from "next/headers";
 import stripe from "@/lib/stripe/stripe";
 import { NextRequest, NextResponse } from "next/server";
 import {
-  getUserByProperty,
   updateUserData,
+  getUserByProperty,
 } from "@/lib/firebase/firebaseFunctions";
 
-const POST = async (req: NextRequest) => {
+export const POST: (req: NextRequest) => Promise<NextResponse> = async (
+  req
+) => {
   const body = await req.text();
   const headersList = await headers();
   const signature = headersList.get("stripe-signature");
@@ -16,7 +18,9 @@ const POST = async (req: NextRequest) => {
     return new NextResponse("No stripe signature.", { status: 400 });
 
   if (!process.env.STRIPE_WEBHOOK_SECRET)
-    return new Response("Stripe webhook secret is not set.", { status: 400 });
+    return new NextResponse("Stripe webhook secret is not set.", {
+      status: 400,
+    });
 
   let event: Stripe.Event;
   try {
@@ -50,5 +54,3 @@ const POST = async (req: NextRequest) => {
 
   return NextResponse.json({ message: "Webhook received" });
 };
-
-export default POST;
