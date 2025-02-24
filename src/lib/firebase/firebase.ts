@@ -3,7 +3,7 @@
 import { getStorage } from "firebase/storage";
 import { getFirestore } from "firebase/firestore";
 import { getApp, getApps, initializeApp } from "firebase/app";
-import { type Analytics, getAnalytics, isSupported } from "firebase/analytics";
+import { getAnalytics, isSupported } from "firebase/analytics";
 
 const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
@@ -20,10 +20,10 @@ const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-let analytics: Analytics;
+const analyticsPromise = async () => {
+  if (typeof window !== "undefined" && (await isSupported()))
+    return getAnalytics(app);
+  return null;
+};
 
-if (typeof window !== "undefined" && (await isSupported())) {
-  analytics = getAnalytics(app);
-}
-
-export { db, storage, analytics };
+export { db, storage, analyticsPromise };
