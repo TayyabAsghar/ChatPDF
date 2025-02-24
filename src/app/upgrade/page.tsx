@@ -24,14 +24,14 @@ const UpgradePage = () => {
   const { hasActiveMembership, loading } = useSubscription();
 
   const handleUpgrade = () => {
-    if (!isSignedIn)
+    if (!user || !isSignedIn) {
       router.push(`/sign-in?redirect_url=${encodeURIComponent(redirectURL)}`);
-
-    if (!user) return;
+      return;
+    }
 
     const userDetails: UserDetails = {
-      email: user.primaryEmailAddress?.toString() || "",
       name: user.fullName || "",
+      email: user.primaryEmailAddress?.toString() || "",
     };
 
     startTransition(async () => {
