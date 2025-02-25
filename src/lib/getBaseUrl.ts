@@ -1,8 +1,9 @@
 const getBaseURL = () => {
-  const { NODE_ENV, VERCEL_URL, NEXT_PUBLIC_VERCEL_URL } = process.env;
+  const { NODE_ENV, WEB_DEPLOYMENT_URL, NEXT_PUBLIC_WEB_DEPLOYMENT_URL } =
+    process.env;
 
   if (NODE_ENV === "production") {
-    const URL = VERCEL_URL || NEXT_PUBLIC_VERCEL_URL;
+    const URL = WEB_DEPLOYMENT_URL || NEXT_PUBLIC_WEB_DEPLOYMENT_URL;
 
     if (!URL) throw new Error("Vercel Deployment URL is not set.");
 

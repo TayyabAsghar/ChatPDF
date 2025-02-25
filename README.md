@@ -56,8 +56,8 @@ Create a `.env.local` file and add the following:
 ```env
 PINECONE_API_KEY=<your_pinecone_api_key>
 GOOGLE_API_KEY=<your_google_api_key>
-VERCEL_URL=<your_vercel_url>
-NEXT_PUBLIC_VERCEL_URL=<your_next_public_vercel_url>
+WEB_DEPLOYMENT_URL=<your_web_deployment_url>
+NEXT_PUBLIC_WEB_DEPLOYMENT_URL=<your_next_public_web_deployment_url>
 
 # Clerk Config
 NEXT_PUBLIC_CLERK_SIGN_IN_URL='/sign-in'
@@ -157,7 +157,9 @@ Upgrade to Pro via **Stripe** monthly subscriptions for higher document limits.
 
 ### **9. Manage Subscription**
 
-- Upgrade to Pro via **Stripe** for higher document limits and use Strip portal to manage your subscription.
+- Upgraded members can cancel or renew subscriptions form **Strip Portal**.
+
+![Stripe Payment Page](/public/screenshots/StripePortalPage.png)
 
 ## License
 
