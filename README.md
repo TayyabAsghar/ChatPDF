@@ -57,6 +57,7 @@ Create a `.env.local` file and add the following:
 PINECONE_API_KEY=<your_pinecone_api_key>
 GOOGLE_API_KEY=<your_google_api_key>
 VERCEL_URL=<your_vercel_url>
+NEXT_PUBLIC_VERCEL_URL=<your_next_public_vercel_url>
 
 # Clerk Config
 NEXT_PUBLIC_CLERK_SIGN_IN_URL='/sign-in'

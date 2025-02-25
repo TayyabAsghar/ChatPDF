@@ -7,6 +7,7 @@ import { UserDetails } from "@/app/upgrade/page";
 import { getUserData, setUserData } from "@/lib/firebase/firebaseFunctions";
 
 const CreateCheckoutSession = async (userDetails: UserDetails) => {
+  const baseURL = getBaseURL();
   const { userId } = await auth();
 
   if (!userId) throw new Error("User not found");
@@ -40,8 +41,8 @@ const CreateCheckoutSession = async (userDetails: UserDetails) => {
     ],
     mode: "subscription",
     customer: stripeCustomerId,
-    success_url: `${getBaseURL()}/dashboard?upgrade=true`,
-    cancel_url: `${getBaseURL()}/upgrade`,
+    success_url: `${baseURL}/dashboard?upgrade=true`,
+    cancel_url: `${baseURL}/upgrade`,
   });
 
   return session.id;

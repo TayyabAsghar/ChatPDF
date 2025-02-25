@@ -1,16 +1,15 @@
 const getBaseURL = () => {
-  const VERCEL_URL = process.env.VERCEL_URL;
+  const { NODE_ENV, VERCEL_URL, NEXT_PUBLIC_VERCEL_URL } = process.env;
 
-  if (!VERCEL_URL) throw new Error("Vercel Deployment Url is not set.");
+  if (NODE_ENV === "production") {
+    const URL = VERCEL_URL || NEXT_PUBLIC_VERCEL_URL;
 
-  const baseURL =
-    process.env.NODE_ENV === "development"
-      ? "http://localhost:3000"
-      : VERCEL_URL;
+    if (!URL) throw new Error("Vercel Deployment URL is not set.");
 
-  if (!baseURL?.startsWith("http://") && !baseURL?.startsWith("https://"))
-    return `https://${baseURL}`;
-  return baseURL;
+    return URL.startsWith("https://") ? URL : `https://${URL}`;
+  }
+
+  return "http://localhost:3000";
 };
 
 export default getBaseURL;

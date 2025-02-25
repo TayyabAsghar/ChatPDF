@@ -1,6 +1,7 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
+import getBaseURL from "@/lib/getBaseUrl";
 import { useRouter } from "next/navigation";
 import React, { useTransition } from "react";
 import { Button } from "@/components/ui/button";
@@ -9,7 +10,6 @@ import { ArrowLeft, CheckIcon } from "lucide-react";
 import useSubscription from "@/hooks/useSubscription";
 import CreateStripePortal from "@/actions/CreateStripePortal";
 import CreateCheckoutSession from "@/actions/CreateCheckoutSession";
-import getBaseURL from "@/lib/getBaseUrl";
 
 export type UserDetails = {
   name: string;
