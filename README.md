@@ -1,4 +1,4 @@
-# Chat with PDF - AI-Powered Document Assistant
+# ChatPDF - AI-Powered Document Assistant
 
 ## Overview
 
