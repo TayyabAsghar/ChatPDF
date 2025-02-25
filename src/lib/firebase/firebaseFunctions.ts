@@ -49,9 +49,10 @@ export const setUserData = async (
 
 export const updateUserData = async (
   userId: string,
-  data: Record<string, string | boolean>
+  data: Record<string, string | boolean>,
+  options: SetOptions = {}
 ) => {
-  await adminDb.collection("users").doc(userId).set(data);
+  await adminDb.collection("users").doc(userId).set(data, options);
 };
 
 export const getChatRef = (userId: string, fileId: string) => {

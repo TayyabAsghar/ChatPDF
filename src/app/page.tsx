@@ -57,7 +57,7 @@ const Home = () => {
             />
           </div>
           <div aria-hidden="true" className="relative">
-            <div className="absolute bottom-0 inset-x-32 bg-gradient-to-t from-white/95 pt-[5%]" />
+            <div className="absolute bottom-0 left-0 w-full inset-x-32 bg-gradient-to-t from-white/95 pt-[5%]" />
           </div>
         </div>
 

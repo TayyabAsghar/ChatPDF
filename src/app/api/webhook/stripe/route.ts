@@ -47,7 +47,11 @@ export const POST: (req: NextRequest) => Promise<NextResponse> = async (
       if (!userDetails?.id)
         return new NextResponse("User not found.", { status: 404 });
 
-      await updateUserData(userDetails.id, { hasActiveMembership: true });
+      await updateUserData(
+        userDetails.id,
+        { hasActiveMembership: true },
+        { merge: true }
+      );
       break;
     }
   }
