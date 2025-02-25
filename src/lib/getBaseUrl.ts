@@ -1,5 +1,5 @@
 const getBaseURL = () => {
-  const VERCEL_URL = process.env.VERCEL_DEPLOYMENT_URL;
+  const VERCEL_URL = process.env.VERCEL_URL;
 
   if (!VERCEL_URL) throw new Error("Vercel Deployment Url is not set.");
 
